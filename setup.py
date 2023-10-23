@@ -1,3 +1,6 @@
+"""
+PHAST forcefields
+"""
 from setuptools import setup
 import versioneer
 
