@@ -5,6 +5,7 @@ import openmm
 import pytest
 from openff.toolkit.topology import Molecule
 from openff.toolkit.typing.engines.smirnoff import ForceField
+from openff.interchange import Interchange
 from openmm import unit
 
 
@@ -29,7 +30,12 @@ def test_load_phast_ff(forcefield):
     ff = ForceField(forcefield, load_plugins=True)
     ethanol = Molecule.from_smiles("CCO")
 
-    system = ff.create_openmm_system(topology=ethanol.to_topology())
+    topology = ethanol.to_topology()
+    topology.box_vectors = None
+
+    out = Interchange.from_smirnoff(force_field=ff, topology=topology)
+    system = out.to_openmm(combine_nonbonded_forces=False)
 
     forces = {force.__class__.__name__: force for force in system.getForces()}
     print(forces)
+    
