@@ -4,7 +4,7 @@
 
 # Installation
 
-```
+```bash
 git clone https://github.com/space-group-research/phast-forcefields.git
 cd phast-forcefields/devtools/conda-envs
 conda env create --file test_env.yaml
