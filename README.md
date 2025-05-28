@@ -2,15 +2,19 @@
 
 ![workflow badge](https://github.com/space-group-research/phast-forcefields/actions/workflows/python-package-conda.yml/badge.svg)
 
-General purpose small molecule forcefields with alternative functional forms.
+PHAST (Potentials with High Accuracy, Speed, and Transferability) provides general purpose small molecule forcefields with physically motivated functional forms. These forms are distinct from traditional Lennard-Jones based forcefields. Transferability is achieved by the default inclusion of explicit polarization and fitting parameters soley to electronic structure calculations.
 
 ## Functional Forms
 
 ### Repulsion-Dispersion Potential
 
+The repulsion-dipsersion potential is a combination of exponential repulsion and the three leading dispersion coefficients, which are damped at short ranges to avoid singularities,
+
 $$U_{rd} = \sum_{i \neq j} \frac{F_0}{\beta_{ij}} e^{\beta_{ij}(r_{ij}-\rho_{ij} )} + \sum_{n=3}^5 f_{2n}(\beta r_{ij}) \frac{C_{2n}}{r_{ij}^{2n}}$$
 
 $$f_{2n}( \beta r_{ij} ) = 1 - e^{- \beta r_{ij}} \sum_{k=0}^{2n} \frac{(\beta r_{ij})^k}{k!}$$
+
+Mixing rules for the dispersion coefficients are the usual geometric mean mixing rule from London and the repulsion mixing are from Smith 1972.
 
 $$C_{2n, ij} = \sqrt{C_{2n, ii} * C_{2n, jj}}; n = 3, 4, 5$$
 
@@ -20,7 +24,11 @@ $$\beta_{ij} = 2 \frac{\beta_{ii}\beta_{jj}}{\beta_{ii}+\beta_{jj}}$$
 
 ### Explicit Polarization
 
+Many-body polarization is included via the induced dipole method of Silberstein, Thole and Applequist. The induced dipoles are obtained by scaling the atomic electric field by the atom's polarizability.
+
 $$\vec{\mu}_{i} = \alpha_i \left( \vec{E}_i + \vec{E}^\prime_i \right)$$
+
+Each induced dipole then induces an electric field on every other induced dipole, making the model many-body.
 
 $$\vec{\mu}_{i} = \alpha_i \left( \vec{E}_i - \sum_{j \neq i} \mathbf{T}_{ij} \vec{\mu}_j \right)$$
 
@@ -41,6 +49,26 @@ python3 -m pip install .
 >>> from openff.toolkit import ForceField
 >>> ff = ForceField('PHAST-H2CNO-2.0.0.offxml', load_plugins=True)
 ```
+
+# Limitations
+
+Currently, a water model is not provided, this is a work in progess. OpenFF Interchange does not support export to any simulation software other than OpenMM due to the custom repulsion-dispersion potential. AmoebaMultipoleForce in OpenMM is being used behind the scenes, however this choice is not ideal due to some particular choices made early in AMOEBA's development.
+
+# Publications
+
+**The PHAST 2.0 Force Field for General Small Molecule and Materials Simulations**
+Adam Hogan, Logan Ritter, and Brian Space
+in press
+
+**PHAHST Potential: Modeling Sorption in a Dispersion-Dominated Environment**
+Logan Ritter, Brant Tudor, Adam Hogan, Tony Pham, and Brian Space
+*Journal of Chemical Theory and Computation* **2024** *20* (13), 5570-5582
+DOI: 10.1021/acs.jctc.4c00226
+
+**Next-Generation Accurate, Transferable, and Polarizable Potentials for Material Simulations**
+Adam Hogan and Brian Space
+*Journal of Chemical Theory and Computation* **2020** *16* (12), 7632-7644
+DOI: 10.1021/acs.jctc.0c00837
 
 # History
 
