@@ -30,7 +30,7 @@ $$\vec{\mu}_{i} = \alpha_i \left( \vec{E}_i + \vec{E}^\prime_i \right)$$
 
 Each induced dipole then induces an electric field on every other induced dipole, making the model many-body.
 
-$$\vec{\mu}_{i} = \alpha_i \left( \vec{E}_i - \sum_{j \neq i} \mathbf{T}_{ij} \vec{\mu}_j \right)$$
+$$\vec{\mu}_{i} = \alpha_i \left( \vec{E}_i - \sum_{j \neq i} T_{ij} \vec{\mu}_j \right)$$
 
 # Installation
 
