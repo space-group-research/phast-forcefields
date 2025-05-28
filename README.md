@@ -46,8 +46,33 @@ python3 -m pip install .
 ## Usage
 
 ```python3
->>> from openff.toolkit import ForceField
->>> ff = ForceField('PHAST-H2CNO-2.0.0.offxml', load_plugins=True)
+from openff.interchange import Interchange
+from openff.toolkit import Molecule, ForceField
+from openff.units import unit
+from openff.units.openmm import to_openmm, from_openmm
+import numpy as np
+import openmm
+import sys
+ff = ForceField('PHAST-H2CNO-2.0.0.offxml', load_plugins=True)
+mol = Molecule.from_smiles('CCC')
+mol.generate_conformers()
+cubic_box = unit.Quantity(30 * np.eye(3), unit.angstrom)
+interchange = Interchange.from_smirnoff(topology=[mol], force_field=ff, box=cubic_box)
+openmm_sys = interchange.to_openmm(combine_nonbonded_forces=False)
+openmm_top = interchange.topology.to_openmm()
+openmm_positions = interchange.positions.to_openmm()
+openmm_integrator = openmm.LangevinMiddleIntegrator(
+    to_openmm(300*unit.kelvin),
+    to_openmm(1/unit.picosecond),
+    to_openmm(0.002*unit.picoseconds)
+)
+simulation = openmm.app.Simulation(openmm_top, openmm_sys, openmm_integrator)
+simulation.context.setPositions(openmm_positions)
+simulation.minimizeEnergy()
+simulation.reporters.append(openmm.app.PDBReporter('output.pdb', 1000))
+simulation.reporters.append(openmm.app.StateDataReporter(sys.stdout, 1000, step=True,
+        potentialEnergy=True, temperature=True))
+simulation.step(10000)
 ```
 
 # Limitations
