@@ -106,6 +106,7 @@ WIP
 Published in JCTC soon. Note that a water model is not included in this version of the forcefield.
 
 - **PHAST-H2CNO-2.0.0.offxml** - Recommended for general use, mostly element-typed forcefield with 2 atom types for hydrogen
+- **PHAST-H2CNO-direct-2.0.0.offxml** - Direct polarization version of the above, not included in published benchmarking
 - **PHAST-H2CNO-nonpolar-2.0.0.offxml** - Nonpolar version of the above, only recommended for systems lacking significant permanent polarity
 - **PHAST-HCNO-2.0.0.offxml** - Element-typed forcefield
 - **PHAST-HC4NO-2.0.0.offxml** - Forcefield with 4 different carbon atom types (sp3, sp2, sp and aromatic sp2)
