@@ -11,5 +11,7 @@ dependencies:
   - pytest
 
     # Core-deps
-  - openff-toolkit
+  - openff-toolkit >=0.14.3
+  - openff-interchange >=0.3.17
+  - openff-units
   - smirnoff-plugins
